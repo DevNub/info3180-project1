@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1 class="page-header">User Profiles</h1>
+
+{# call get_uploaded_images() function to print unordered / ordered list of files uploaded to static/uploads #}
+<ul>
+    {% for filename in fileList %}
+        <img src="{{ url_for('static', filename="images/" + 'filename') }}" >
+    {% endfor %}
+</ul>
+
+{% endblock %}
