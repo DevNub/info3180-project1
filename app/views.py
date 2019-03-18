@@ -6,13 +6,16 @@ This file creates your application.
 """
 
 import os
-from app import app
+from app import app, db
 import datetime
 from flask import render_template, request, redirect, url_for, flash, abort
 
 from werkzeug.utils import secure_filename
 
 from .forms import UploadForm
+
+from flask_login import login_user, logout_user, current_user, login_required
+from app.models import UserProfile
 
 
 now = datetime.datetime.now() # today's date
