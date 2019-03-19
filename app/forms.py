@@ -3,10 +3,10 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, SelectField
 from wtforms.validators import DataRequired, Email
 
-Gender_Pick = (('1','Male'),('2','Female'))
+Gender_Pick = (('Male','Male'),('Female','Female'))
 
 class UploadForm(FlaskForm):
-    upload = FileField('Photo', validators=[ FileRequired(), FileAllowed(['jpg', 'png', 'Images only!'])])
+    upload = FileField('Photo', validators=[ FileRequired(), FileAllowed(['png', 'PNG Images only!'])])
     description = StringField('Biography', validators=[DataRequired()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])

@@ -5,9 +5,30 @@
 
 {# call get_uploaded_images() function to print unordered / ordered list of files uploaded to static/uploads #}
 <ul>
-    {% for filename in fileList %}
-        <img src="{{ url_for('static', filename="images/" + 'filename') }}" >
+    {% for user in users %}
+    <li>
+        <div class="user-grid">
+
+            <p><img width="90px" src="{{ url_for('static', filename="images/"+ user.username +".png") }}" ></p>
+        
+        
+        <div class="user-grid">
+                
+                <div class="user-flex">
+                    <b>{{ user.first_name }} {{ user.last_name }}</b>
+                    <p> {{ user.gender }}</br>
+                    {{ user.location }}</p>
+                </div>
+        <a href="{{ url_for('user', username=user.username) }}"><button type="submit" id="viewprofile">View Profile</button></a>
+        </div>
+        
+        
+        </div>
+    </li>
     {% endfor %}
+    
+    
+    
 </ul>
 
 {% endblock %}

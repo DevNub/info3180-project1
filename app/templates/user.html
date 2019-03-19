@@ -6,19 +6,22 @@
     <div id="pArea">
         
         <div id="pInfo">
-            <img src="{{ url_for('static', filename='images/profile.jpg') }}" id="pimg">
+            <img src="{{ url_for('static', filename="images/"+ uid +".png") }}" id="pimg">
             <p>
                 <h3>{{ name }}</h3>
-                <p><a href="#">@{{ usern }}</a></p>
+                <p><a href="#">@{{ uid }}</a></p>
                 <p>{{ loca }}</p>
-                <p>{{ joindate}}</p>
+                <p>{{ date}}</p>
             </p>
         </div>
         
-        <p class="occupation">Walt Disney Mascot</p>
+        <p class="occupation">{{ email }}</p>
         <div class="center">
             
-            <p>Mickey loves adventure and trying new things, though his best intentions often leave him in silly situations in different settings. He is optimistic and a friend to everyone.</p>
+            <p> {{ bio }}</p>
+            <!--- Walt Disney Mascot
+                Mickey loves adventure and trying new things, though his best intentions often leave him in silly situations in different settings. He is optimistic and a friend to everyone.
+            --->
         </div>
         
         <div id="pBio">

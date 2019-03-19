@@ -37,35 +37,72 @@ def about():
     return render_template('about.html', name="INFO3180 Project 1")
 
 
-@app.route('/user')
-def user():
+@app.route('/user/<username>')
+def user(username):
     """Render the profile page."""
-    date=format_date_joined(join_date)
-    return render_template('user.html', name="Mickey Mouse", joindate=date, loca="Clubhouse, Disney", usern="doubleM")
+    #date=format_date_joined(join_date)
+    
+    user = UserProfile.query.filter_by(username=username).first()
+    
+    uid= username
+    name="N/A"
+    loca="N/A"
+    date="N/A"
+    bio="N/A"
+    email="N/A"
+    if (user):
+        uid=user.username
+        name=""+user.first_name+" "+user.last_name
+        loca=user.location
+        date=user.join_date
+        bio=user.bio
+        email=user.email
+    
+    return render_template('user.html', uid=uid, name=name, loca=loca, date=date, bio=bio, email=email)
     
     
 @app.route('/profiles')
 def profiles():
     """Render page with uploaded profiles"""
-    filename='filename'
-    return render_template('profiles.html', filename=filename)
+    #filename='filename'
+    users = db.session.query(UserProfile).all()
+    return render_template('profiles.html', users=users)
 
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
     # Instantiate your form class
     form = UploadForm()
-    # Validate file upload on submit
-    if request.method == 'POST' and profile.validate_on_submit():
-        # Get file data and save to your uploads folder
-        photo = form.upload.data # we could also use request.files['photo']
+    # Validate profile upload on submit
+    if request.method == 'POST' and form.validate_on_submit():
+        # Get profile data and save to your uploads folder
+        userid = form.userid.data
+        fname = form.fname.data
+        lname = form.lname.data
+        gender = form.gender.data
+        location = form.location.data
+        email = form.email.data
         description = form.description.data
+        photo = form.upload.data # we could also use request.files['photo']
         
-        filename = secure_filename(photo.filename)
+        #filename = secure_filename(photo.filename)
+        filename = userid+".png"
         photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
         flash('File Saved', 'success')
-        return redirect(url_for('home'))
+        
+        #SEND FORM DATA TO DB
+        date = datetime.datetime.now().date()
+        user = UserProfile(fname, lname, userid, email, location, gender, join_date=date, bio=description)
+
+        db.session.add(user)
+        #tom = UserProfile.query.filter_by(username='tom').first()
+        #tom.gender='Male'
+        
+        
+        db.session.commit()
+        flash('New user was successfully added', 'success')
+        
+        return redirect(url_for('profiles'))
 
     return render_template('profile.html', form=form)
     
@@ -80,10 +117,10 @@ def get_uploaded_images():
     fileList = []
     rootdir = os.getcwd()
     print (rootdir)
-    for subdir, dirs, files in os.walk(rootdir + '/some/folder'):
+    for subdir, dirs, files in os.walk(rootdir + '/static/images'):
         for file in files:
             fileList.append(os.path.join(subdir, file))
-    return render_template('files.html', fileList=fileList)
+    return render_template('profiles.html', fileList=fileList)
 
 
 
